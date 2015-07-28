@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>My Account</title>
+    <meta charset="utf-8" />
+    <script src="/scripts/jquery-2.1.1.min.js"></script>
+</head>
+<body onload="getUserInfo();">
+    <h1>My Account</h1>
+
+    <h3 id="greetingmsg"></h3>
+
+    <button style="float:left" onclick="goToAddPost()">Add Post</button>
+    <button style="float:left; margin-left: 2%" onclick="sendTestEmail()">Send Test Email</button>
+    <span id="emessage" style="display:none; margin-left: 2%">Email Sent!</span>
+
+    <br /><br />
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/api/user/getuserinfo'
+            }).done(function (data) {
+                $("#greetingmsg").text("Hello " + data.Name + "!");
+            }).fail(function () {
+                alert("ajax fail");
+            })
+        });
+
+        function goToAddPost() {
+            window.location = "/Views/AddPost.html";
+        }
+
+        function sendTestEmail() {
+            $.ajax({
+                type: 'GET',
+                url: '/api/email/sendemail'
+            }).done(function () {
+                $("#emessage").show();
+            })
+        }
+    </script>
+
+</body>
+</html>

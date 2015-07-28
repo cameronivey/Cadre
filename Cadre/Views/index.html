@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <meta charset="utf-8" />
+    <script src="/scripts/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+    <h1>Home Page</h1>
+    
+    <button onclick="loginUser()">Log sdfsdgfd In</button><br /><br />
+
+    OR: <br />
+
+    <h3>Register:</h3>
+
+    <div></div>
+    <form action="/api/user/register" method="post">
+        Email:
+        <input type="text" name="Email" /><br /><br />
+
+        Name:
+        <input type="text" name="Name" /><br /><br />
+        
+        Password:
+        <input type="text" name="Password" /><br /><br />
+
+        Confirm Password:
+        <input type="text" name="ConfirmPassword" /><br /><br />
+
+        <input type="submit" value="Register"/>
+    </form>
+
+    <script>
+        function loginUser() {
+            var token = sessionStorage.getItem('accessToken');
+            var headers = {};
+            if (token) {
+                headers.Authorization = 'Bearer ' + token;
+            }
+
+            alert("logging in user");
+            $.ajax({
+                type: 'GET',
+                url: '/api/home/login',
+                headers: headers
+            }).done(function (data) {
+                window.location = "/Views/UserAccount.html";
+            }).fail(function () {
+                alert("login ajax fail");
+            });
+        }
+    </script>
+
+</body>
+</html>
