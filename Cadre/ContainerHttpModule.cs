@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
-using System.Web.Mvc;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using System.Web.Http;
-using Cadre.DataAccessLayer;
 using Cadre;
 using Autofac.Integration.WebApi;
-using Autofac;
+using System.Net.Http;
 
-[assembly: PreApplicationStartMethod(typeof(ContainerHttpModule), "Start")]
+//[assembly: PreApplicationStartMethod(typeof(ContainerHttpModule), "Start")]
 namespace Cadre
 {
     public class ContainerHttpModule : IHttpModule
@@ -25,8 +23,14 @@ namespace Cadre
         {
             var resolver = (AutofacWebApiDependencyResolver)GlobalConfiguration.Configuration.DependencyResolver;
 
-            var modules = resolver.GetServices(typeof(IHttpModule));
-            
+            var config = new HttpConfiguration();
+            config.DependencyResolver = resolver;
+            config.EnsureInitialized();
+
+            var request = new HttpRequestMessage();
+            request.SetConfiguration(config);
+
+            var modules = request.GetDependencyScope().GetServices(typeof(IHttpModule));
             return null;     
         }
 

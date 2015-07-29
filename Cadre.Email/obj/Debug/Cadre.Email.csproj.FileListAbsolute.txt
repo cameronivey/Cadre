@@ -1,6 +1,0 @@
-C:\Users\Cameron\Documents\Visual Studio 2015\Projects\Cadre\Cadre.Email\bin\Debug\Cadre.Email.exe.config
-C:\Users\Cameron\Documents\Visual Studio 2015\Projects\Cadre\Cadre.Email\obj\Debug\Cadre.Email.csprojResolveAssemblyReference.cache
-C:\Users\Cameron\Documents\Visual Studio 2015\Projects\Cadre\Cadre.Email\bin\Debug\Cadre.Email.exe
-C:\Users\Cameron\Documents\Visual Studio 2015\Projects\Cadre\Cadre.Email\bin\Debug\Cadre.Email.pdb
-C:\Users\Cameron\Documents\Visual Studio 2015\Projects\Cadre\Cadre.Email\obj\Debug\Cadre.Email.exe
-C:\Users\Cameron\Documents\Visual Studio 2015\Projects\Cadre\Cadre.Email\obj\Debug\Cadre.Email.pdb

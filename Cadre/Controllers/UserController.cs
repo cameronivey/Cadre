@@ -68,6 +68,7 @@ namespace Cadre.Controllers
         public IHttpActionResult GetUserInfo()
         {
             var currentUser = database.Get<User>().SingleOrDefault(u => u.Email == HttpContext.Current.User.Identity.Name);
+
             var viewModel = new UserInfoViewModel(currentUser.Name);
 
             if (viewModel == null)

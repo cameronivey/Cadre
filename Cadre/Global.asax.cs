@@ -30,7 +30,7 @@ namespace Cadre
             builder.RegisterType<PostDatabase>().As<IPostDatabase>().InstancePerRequest();
             //builder.RegisterModule(new BasicAuthHttpModule());
             //builder.RegisterModule(new BasicAuthHttpModule(IPostDatabase)).As<IHttpModule>();
-            builder.RegisterType<BasicAuthHttpModule>().As<IHttpModule>().SingleInstance(); 
+            //builder.RegisterType<BasicAuthHttpModule>().As<IHttpModule>().SingleInstance(); 
 
             var container = builder.Build();
             GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
