@@ -26,7 +26,7 @@ namespace Cadre.Controllers
             {
                 return BadRequest();
             }
-          
+
             var newPost = new Request()
             {
                 Submitter = database.Get<User>().SingleOrDefault(u => u.Email == HttpContext.Current.User.Identity.Name),
@@ -84,7 +84,7 @@ namespace Cadre.Controllers
                 Details = post.Details
             }));
 
-            foreach(var viewModel in viewModels)
+            foreach (var viewModel in viewModels)
             {
                 viewModel.EmailText = GetById(viewModel.Id).GetEmailText();
             }
@@ -92,27 +92,33 @@ namespace Cadre.Controllers
             return Ok(viewModels);
         }
 
-        /*[HttpGet]
-        [Route("removeallnulluserposts/")]
-        public IHttpActionResult RemoveAllNullUserPosts()
+        [HttpGet]
+        [Route("getuserposts/{id:int}")]
+        public IHttpActionResult GetUserPosts(int id)
         {
-            var posts = database.Get<Post>();
+            var posts = database.Get<Post>().Where(post => post.Submitter.Id == id);
 
-            foreach (var post in posts)
+            if (posts == null)
             {
-                if (post.Submitter == null)
-                {
-                    database.Remove(post);
-                }
+                return BadRequest();
             }
 
-            database.CommitAsync();
+            var viewModels = new List<PostViewModel>();
 
-            return Ok();
-        }*/
+            viewModels.AddRange(posts.Select(post => new PostViewModel()
+            {
+                Id = post.Id,
+                SubmitterName = post.Submitter.Name,
+                SubmitterEmail = post.Submitter.Email,
+                Summary = post.Summary,
+                Details = post.Details
+            }));
+
+            return Ok(posts);
+        }
 
         [HttpGet]
-        [Route("remove/{id}:int")]
+        [Route("remove/{id:int}")]
         public IHttpActionResult Remove(int id)
         {
             var post = GetById(id);

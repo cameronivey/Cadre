@@ -4,74 +4,50 @@
     <title>Add Post</title>
 	<meta charset="utf-8" />
     <script src="/scripts/jquery-2.1.1.min.js"></script>
+    <script src="/scripts/application.js"></script>
 </head>
-<body>
-    <h2>Add Post</h2>
+<body onload="loadLayout()">
+    <div id="navbar"></div>
 
-    Type: <br />
-    <select id="typeselect" name="posttype">
-        <option selected disabled value=""></option>
-        <option value="Request">Request</option>
-        <option value="Announcement">Announcement</option>
-    </select>
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Add Post</h1>
+                </div>
 
-    <br /> <br />
+                <div class="col-xs-2">
+                    <label for="typeselect">Type:</label>
+                    <select id="typeselect" name="posttype" class="form-control input-sm">
+                        <option selected disabled value=""></option>
+                        <option value="Request">Request</option>
+                        <option value="Announcement">Announcement</option>
+                    </select>
+                    <br />
+                </div>
+            </div>
 
-    Summary: <br />
-    <input type="text" id="summary" size="50" maxlength="50" /> <br /> <br />
+            <div class="row">
+                <div class="col-xs-4">
+                    <label for="summary">Summary:</label>
+                    <input type="text" id="summary" size="50" maxlength="50" class="form-control input-md"/> <br /> 
 
-    Details: <br />
-    <textarea id="details" rows="6" cols="50"></textarea> <br /> <br />
+                    <label for="details">Details:</label> <br />
+                    <textarea id="details" rows="6" cols="50" class="form-control input-md"></textarea> <br /> 
 
-    <button onclick="addPost()">Submit</button> <br /> <br />
+                    <button onclick="addPost()" class="btn btn-success">Submit</button> <br /> <br />
+                </div>
 
-    <div id="message"style="display:none">
-        <span style="margin-left: 2%">Post Added!</span> <br /> <br />
 
-        <button onclick="goToIndex()">Home</button> <br /> <br />
+                <div id="message" style="display:none">
+                    <span style="margin-left: 2%">Post Added!</span> <br /> <br />
 
-        <span id="objectjson"></span> <br /> <br />
+                    <button onclick="goToIndex()">Home</button> <br /> <br />
+
+                    <span id="objectjson"></span> <br /> <br />
+                </div>
+            </div>
+        </div>
     </div>
-
-    <script>
-        function addPost() {
-            var postData = {
-                summary: $("#summary").val(),
-                details: $("#details").val()
-            };
-
-            console.log(postData);
-
-            if ($("#typeselect").val() == "Request") {
-                $.ajax({
-                    type: 'POST',
-                    url: '/api/post/addrequest',
-                    data: postData
-                }).done(function (data) {
-                    $("#message").show();
-                    document.getElementById("objectjson").innerHTML = data.summary;
-                }).fail(function () {
-                    alert("ajax fail");
-                });
-            } else {
-                $.ajax({
-                    type: 'POST',
-                    url: '/api/post/addannouncement',
-                    data: postData,
-                }).done(function (data) {
-                    $("#message").show();
-                    document.getElementById("objectjson").innerHTML = data.summary;
-                }).fail(function () {
-                    alert("ajax fail");
-                });
-            }
-        }
-
-        function goToIndex() {
-            window.location = "/Views/Index.html";
-        }
-    </script>
-
-
 </body>
 </html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!-- saved from url=(0039)http://localhost:50123/Views/index.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Home</title>
+    <meta charset="utf-8">
+    <script src="./Home_files/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+    <h1>Home Page</h1>
+
+    <button onclick="loginUser()">Log In</button><br><br>
+
+    OR: <br>
+
+    <h3>Register:</h3>
+
+    <div></div>
+
+    Email:
+    <input type="text" id="emailInput"><br><br>
+
+    Name:
+    <input type="text" id="nameInput"><br><br>
+
+    Password:
+    <input type="text" id="passwordInput"><br><br>
+
+    Confirm Password:
+    <input type="text" id="confirmpasswordInput"><br><br>
+
+    <button onclick="registerUser()">Register</button>
+
+
+    <script>
+        function loginUser() {
+            var token = sessionStorage.getItem('accessToken');
+            var headers = {};
+            if (token) {
+                headers.Authorization = 'Bearer ' + token;
+            }
+
+            alert("logging in user");
+            $.ajax({
+                type: 'GET',
+                url: '/api/home/login',
+                headers: headers
+            }).done(function (data) {
+                window.location = "/Views/UserAccount.html";
+            }).fail(function () {
+                alert("login ajax fail");
+            });
+        }
+
+        function registerUser() {
+            var registrationData = {
+                email: $("#emailInput").val(),
+                name: $("#nameInput").val(),
+                password: $("#passwordInput").val(),
+                confirmpassword: $("#confirmpasswordInput").val()
+            };
+
+            $.ajax({
+                type: 'Post',
+                url: '/api/user/register',
+                data: registrationData
+            }).done(function (data) {
+                window.location = "/Views/AllUsers.html";
+            }).fail(function () {
+                alert("register ajax fail");
+            });
+
+        }
+    </script>
+
+
+
+</body></html>

@@ -14,12 +14,12 @@ namespace Cadre
     {
         private const string Realm = "Cameron's Site";
 
-        private readonly IPostDatabase database;
+        //private readonly IPostDatabase database;
 
-        public BasicAuthHttpModule(IPostDatabase database)
-        {
-            this.database = database;
-        }
+        //public BasicAuthHttpModule(IPostDatabase database)
+        //{
+        //    this.database = database;
+        //}
 
         public void Init(HttpApplication context)
         {

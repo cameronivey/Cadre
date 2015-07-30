@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Users</title>
+    <meta charset="utf-8" />
+
+    <script src="/scripts/application.js"></script>
+    <script src="/scripts/jquery-2.1.1.min.js"></script>
+
+</head>
+<body onload="loadLayout(); getAllUsers()">
+    <div id="navbar"></div>
+
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Users</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <table class="table" id="userDisplayTable">
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th></th>
+                        </tr>
+                    </table>
+                    <div id="userDisplay"></div>
+                </div>
+                <div class="col-lg-3" id="userPostsView">
+                    <h4 class="page-header">All Posts for ..</h4>
+                </div> 
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -141,8 +141,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CSS\font-awesome.min.css" />
+    <Content Include="CSS\metisMenu.min.css" />
+    <Content Include="CSS\sb-admin-2.css" />
+    <Content Include="CSS\site.css" />
+    <Content Include="CSS\timeline.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\application.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -152,10 +158,16 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\sb-admin-2.js" />
     <Content Include="Views\AddPost.html" />
     <Content Include="Views\AllPosts.html" />
+    <Content Include="Views\AllUsers.html" />
     <Content Include="Views\index.html" />
+    <Content Include="Views\LandingPage.html" />
     <Content Include="Views\Reply.html" />
+    <Content Include="Views\Shared\header.html" />
+    <Content Include="Views\Shared\nav.html" />
+    <Content Include="Views\Shared\_Layout.html" />
     <Content Include="Views\UserAccount.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

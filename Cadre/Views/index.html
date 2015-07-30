@@ -3,33 +3,45 @@
 <head>
     <title>Home</title>
     <meta charset="utf-8" />
+
+    <script src="/scripts/application.js"></script>
     <script src="/scripts/jquery-2.1.1.min.js"></script>
+
 </head>
-<body>
-    <h1>Home Page</h1>
-    
-    <button onclick="loginUser()">Log sdfsdgfd In</button><br /><br />
+<body onload="loadLayout()">
+    <div id="navbar"></div>
 
-    OR: <br />
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Home</h1>
 
-    <h3>Register:</h3>
+                    <button type="button" class="btn btn-primary" onclick="loginUser()">Log In</button><br /><br />
 
-    <div></div>
-    <form action="/api/user/register" method="post">
-        Email:
-        <input type="text" name="Email" /><br /><br />
+                    <button id="registerButton" type="button" class="btn btn-primary" onclick="toggleRegisterForm()">Register</button><br /><br />
+                </div>
 
-        Name:
-        <input type="text" name="Name" /><br /><br />
-        
-        Password:
-        <input type="text" name="Password" /><br /><br />
+                <div class="col-xs-3">
+                    <div class="form-group" id="registerForm" style="display: none">
+                        <label for="emailInput">Email:</label>
+                        <input type="text" id="emailInput" class="form-control input-sm" maxlength="30" size="30" /><br />
 
-        Confirm Password:
-        <input type="text" name="ConfirmPassword" /><br /><br />
-
-        <input type="submit" value="Register"/>
-    </form>
+                        <label for="nameInput">Name:</label>
+                        <input type="text" id="nameInput" class="form-control" /><br />
+                        
+                        <label for="passwordInput">Password:</label>
+                        <input type="text" id="passwordInput" class="form-control" /><br />
+                            
+                        <label for="confirmPasswordInput">Confirm Password:</label>
+                        <input type="text" id="confirmpasswordInput" class="form-control" /><br />
+                           
+                        <button class="btn btn-success" onclick="registerUser()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         function loginUser() {
@@ -49,6 +61,26 @@
             }).fail(function () {
                 alert("login ajax fail");
             });
+        }
+
+        function registerUser() {
+            var registrationData = {
+                email: $("#emailInput").val(),
+                name: $("#nameInput").val(),
+                password: $("#passwordInput").val(),
+                confirmpassword: $("#confirmpasswordInput").val()
+            };
+
+            $.ajax({
+                type: 'Post',
+                url: '/api/user/register',
+                data: registrationData
+            }).done(function (data) {
+                window.location = "/Views/AllUsers.html";
+            }).fail(function () {
+                alert("register ajax fail");
+            });
+
         }
     </script>
 
