@@ -19,10 +19,10 @@ namespace Cadre.Controllers
             this.database = database;
         }
         
-        [Route("SendEmail")]
+        [Route("SendEmail/{isDigest:bool}")]
         [AllowAnonymous]
         [HttpGet]
-        public IHttpActionResult SendEmail()
+        public IHttpActionResult SendEmail(bool isDigest)
         {
             var addresses = new List<string>();
             addresses.Add("cameron.ivey@excella.com");
@@ -35,10 +35,28 @@ namespace Cadre.Controllers
                 mail.To.Add(address);
             }
 
-            mail.Subject = "Cadre Test Email";
+            IEmailBodyBuilder builder;
+            if (isDigest)
+            {
+                mail.Subject = "Cadre Digest Email";
+                builder = new DigestBodyBuilder();
+            }
+            else
+            {
+                mail.Subject = "Cadre Reminder Email";
+                builder = new ReminderBodyBuilder();
+            }
 
-            var builder = new EmailBodyBuilder();
+            mail.Body = BuildEmailBody(builder);
+            mail.IsBodyHtml = true;
 
+            SendSmtpEmail(mail);
+
+            return Ok(mail);
+        }
+
+        private string BuildEmailBody(IEmailBodyBuilder builder)
+        {
             var viewModels = new List<PostViewModel>();
             var posts = database.Get<Post>();
 
@@ -56,15 +74,10 @@ namespace Cadre.Controllers
                 viewModel.EmailText = database.Get<Post>().SingleOrDefault(post => post.Id == viewModel.Id).GetEmailText();
             }
 
-            mail.Body = builder.Build(viewModels);
-            mail.IsBodyHtml = true;
-
-            SendSmtpEmail(mail);
-
-            return Ok(mail);
+            return builder.Build(viewModels);
         }
 
-        public void SendSmtpEmail(MailMessage mail)
+        private void SendSmtpEmail(MailMessage mail)
         {
             SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
 

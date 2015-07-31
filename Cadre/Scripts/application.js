@@ -120,3 +120,29 @@ function addPost() {
         });
     }
 }
+
+function sendDigestEmail() {
+    $.ajax({
+        type: 'GET',
+        url: '/api/email/sendemail/true'
+    }).done(function () {
+        $("#sentMessage").show();
+        $("#sentMessageError").hide();
+    }).fail(function () {
+        $("#sentMessageError").show();
+        $("#sentMessage").hide();
+    })
+}
+
+function sendReminderEmail() {
+    $.ajax({
+        type: 'GET',
+        url: '/api/email/sendemail/false'
+    }).done(function () {
+        $("#sentMessage").show();
+        $("#sentMessageError").hide();
+    }).fail(function () {
+        $("#sentMessageError").show();
+        $("#sentMessage").hide();
+    })
+}

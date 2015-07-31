@@ -4,21 +4,20 @@ using System.Text;
 
 namespace Cadre {
 
-    public class EmailBodyBuilder : IEmailBodyBuilder
+    public class DigestBodyBuilder : IEmailBodyBuilder
     {
         public string Build(List<PostViewModel> viewModels)
         {
             var builder = new StringBuilder();
             var count = 1;
 
-            builder.Append("<h2>Cadre Email System</h2><br />");
+            builder.Append("<h2>Cadre Email System Digest</h2><br />");
 
             builder.Append("<h4>Summary</h4><br />");
             foreach (PostViewModel post in viewModels)
             {
-                builder.Append("<span><b>" + count + ". " + post.SubmitterName +
-                    "(" + post.SubmitterEmail + ")</b> is " + post.EmailText + " " +
-                    post.Summary + "</span><br />"
+                builder.Append("<span><b>" + count + ". " + post.SubmitterName + "</b> is " 
+                    + post.EmailText + " " + post.Summary + "</span><br />"
                 );
                 count++;
             }

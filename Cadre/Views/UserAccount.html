@@ -31,15 +31,6 @@
         function goToAddPost() {
             window.location = "/Views/AddPost.html";
         }
-
-        function sendTestEmail() {
-            $.ajax({
-                type: 'GET',
-                url: '/api/email/sendemail'
-            }).done(function () {
-                $("#emessage").show();
-            })
-        }
     </script>
 
 </body>
