@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cadre.Domain.Models
 {
@@ -6,6 +7,8 @@ namespace Cadre.Domain.Models
     {
         [Key]
         public int Id { get; set; }
+        
+        public DateTime TimeSubmitted { get; set; }
 
         public User Submitter { get; set; }
 

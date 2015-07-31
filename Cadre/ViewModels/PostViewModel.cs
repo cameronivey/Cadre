@@ -1,4 +1,5 @@
 ﻿using Cadre.Domain.Models;
+using System;
 
 namespace Cadre.ViewModels
 {
@@ -12,14 +13,18 @@ namespace Cadre.ViewModels
         public PostViewModel(Post post)
         {
             Id = post.Id;
+            TimeSubmitted = post.TimeSubmitted;
             EmailText = post.GetEmailText();
             SubmitterName = post.Submitter.Name;
             SubmitterEmail = post.Submitter.Email;
             Summary = post.Summary;
             Details = post.Details;
+
         }
 
         public int Id { get; set; }
+
+        public DateTime TimeSubmitted { get; set; }
         
         public string EmailText { get; set; }
 

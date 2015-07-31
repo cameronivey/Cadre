@@ -18,6 +18,7 @@ function appendHead() {
     $('head').append('<lin' + 'k href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">')
     $('head').append('<lin' + 'k rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">')
     $('head').append('<lin' + 'k rel="stylesheet" type="text/css" href="/CSS/site.css">')
+    $('head').append('<script src="/scripts/date.js"></s' + 'cript>');
 }
 
 function toggleRegisterForm() {
@@ -60,6 +61,7 @@ function viewUserPosts(id, name) {
                 $.each(data, function () {
                     postsHtml += "<table class='table'>" +
                                  "<tr><td>Post Id: </td><td>" + this.Id + "</td></tr>" +
+                                 "<tr><td>Time: </td><td>" + this.TimeSubmitted + "</td></tr>" +
                                  "<tr><td>Summary: </td><td>" + this.Summary + "</td></tr>" +
                                  "<tr><td>Details: </td><td>" + this.Details + "</td></tr>" +
                                  "</table>";

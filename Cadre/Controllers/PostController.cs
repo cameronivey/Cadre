@@ -5,6 +5,7 @@ using System.Web;
 using System.Linq;
 using System.Collections.Generic;
 using Cadre.ViewModels;
+using System;
 
 namespace Cadre.Controllers
 {
@@ -31,7 +32,8 @@ namespace Cadre.Controllers
             {
                 Submitter = database.Get<User>().SingleOrDefault(u => u.Email == HttpContext.Current.User.Identity.Name),
                 Summary = postViewModel.Summary,
-                Details = postViewModel.Details
+                Details = postViewModel.Details,
+                TimeSubmitted = DateTime.Now
             };
 
             database.Add(newPost);
@@ -54,7 +56,8 @@ namespace Cadre.Controllers
             {
                 Submitter = database.Get<User>().SingleOrDefault(u => u.Email == HttpContext.Current.User.Identity.Name),
                 Summary = postViewModel.Summary,
-                Details = postViewModel.Details
+                Details = postViewModel.Details,
+                TimeSubmitted = DateTime.Now
             };
 
             database.Add(newPost);
@@ -78,6 +81,7 @@ namespace Cadre.Controllers
             viewModels.AddRange(posts.Select(post => new PostViewModel()
             {
                 Id = post.Id,
+                TimeSubmitted = post.TimeSubmitted,
                 SubmitterName = post.Submitter.Name,
                 SubmitterEmail = post.Submitter.Email,
                 Summary = post.Summary,
@@ -108,12 +112,13 @@ namespace Cadre.Controllers
             viewModels.AddRange(posts.Select(post => new PostViewModel()
             {
                 Id = post.Id,
+                TimeSubmitted = post.TimeSubmitted,
                 SubmitterName = post.Submitter.Name,
                 SubmitterEmail = post.Submitter.Email,
                 Summary = post.Summary,
                 Details = post.Details
             }));
-
+            
             return Ok(posts);
         }
 
