@@ -36,15 +36,14 @@
                     <textarea id="details" rows="6" cols="50" class="form-control input-md"></textarea> <br /> 
 
                     <button onclick="addPost()" class="btn btn-success">Submit</button> <br /> <br />
-                </div>
 
+                    <div class="alert alert-success fade in" id="postAdded" style="display: none">
+                        <strong>Success!</strong> Post added successfully.
+                    </div>
+                    <div class="alert alert-danger fade in" id="postAddedError" style="display: none">
+                        <strong>Error!</strong> There was a problem adding the post.
+                    </div>
 
-                <div id="message" style="display:none">
-                    <span style="margin-left: 2%">Post Added!</span> <br /> <br />
-
-                    <button onclick="goToIndex()">Home</button> <br /> <br />
-
-                    <span id="objectjson"></span> <br /> <br />
                 </div>
             </div>
         </div>

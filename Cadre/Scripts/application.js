@@ -18,6 +18,7 @@ function appendHead() {
     $('head').append('<lin' + 'k href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">')
     $('head').append('<lin' + 'k rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">')
     $('head').append('<lin' + 'k rel="stylesheet" type="text/css" href="/CSS/site.css">')
+    $('head').append('<lin' + 'k rel="icon" type="image/png" href="/Content/logo_fav.png" />')
     $('head').append('<script src="/scripts/date.js"></s' + 'cript>');
 }
 
@@ -38,7 +39,31 @@ function getAllUsers() {
                     "</td><td>" + this.Name +
                     "</td><td>" + this.Email +
                     "</td><td>" +
-                    '<button class ="btn btn-info" onClick="viewUserPosts(' + this.Id + ', \'' + this.Name + '\')">View Posts</button>' +
+                    '<button class="btn btn-info" onClick="viewUserPosts(' + this.Id + ', \'' + this.Name + '\')">View Posts</button></td><td>' +
+                    '<button class="btn btn-danger" onClick="removeUser(' + this.Id + ')">Remove</button></td>' +
+                    "</td></tr>");
+            })
+        },
+        error: function () {
+            alert("fail");
+        }
+    })
+};
+
+function getAllPosts() {
+    $.ajax({
+        type: 'GET',
+        url: '/api/post/getall',
+        dataType: 'json',
+        success: function (data) {
+            var quotedName = "'" + this.Name + "'";
+            $.each(data, function () {
+                $("#postDisplayTable").append(
+                    "<tr><td><button class='btn btn-link' style='text-align:left'  onclick='viewPostInfo(" + this.Id + ")'>" + this.Id + "</button>" +
+                    "</td><td>" + this.SubmitterName +
+                    "</td><td>" + this.TimeSubmitted +
+                    "</td><td>" + this.Summary +
+                    "</td><td>" + this.Details +
                     "</td></tr>");
             })
         },
@@ -54,20 +79,18 @@ function viewUserPosts(id, name) {
         url: '/api/post/getuserposts/' + id,
         dataType: 'json',
         success: function (data) {
-            var postsHtml = "<h4 class='page-header'>All Posts for " + name + "</h4>";
+            $("#userPostsHeader").html("All Posts for " + name);
             if (data.length == 0) {
-                    postsHtml += "<span>This user has no posts.</span></br>";
-            } else { 
+                $("#userPostsTable").html("<span>This user has no posts.</span></br>");
+            } else {
+                $("#userPostsTable").html("<tr><th>Id</th><th>Time</th><th>Summary</th><th>Details</th></tr>");
                 $.each(data, function () {
-                    postsHtml += "<table class='table'>" +
-                                 "<tr><td>Post Id: </td><td>" + this.Id + "</td></tr>" +
-                                 "<tr><td>Time: </td><td>" + this.TimeSubmitted + "</td></tr>" +
-                                 "<tr><td>Summary: </td><td>" + this.Summary + "</td></tr>" +
-                                 "<tr><td>Details: </td><td>" + this.Details + "</td></tr>" +
-                                 "</table>";
+                    $("#userPostsTable").append("<tr><td>" + this.Id + "</td>" +
+                                              "<td>" + this.TimeSubmitted + "</td>" +
+                                              "<td>" + this.Summary + "</td>" +
+                                              "<td>" + this.Details + "</td></tr>");
                 })
             }
-            $("#userPostsView").html(postsHtml);
         },
         error: function () {
             alert("fail");
@@ -75,13 +98,18 @@ function viewUserPosts(id, name) {
     })
 };
 
-function hideUserPosts(id) {
-    var divName = "#user_" + id + "_posts";
-    $(divName).remove();
-    var hideBtnId = "#hideBtn" + id;
-    var viewBtnId = "#viewBtn" + id;
-    $(hideBtnId).hide();
-    $(viewBtnId).show();
+function removeUser(id) {
+    $.ajax({
+        type: 'POST',
+        url: '/api/user/remove/' + id,
+        dataType: 'json',
+        success: function () {
+            window.location = "/Views/AllUsers.html";
+        },
+        error: function () {
+            alert("remove fail");
+        }
+    })
 }
 
 function goToIndex() {
@@ -94,34 +122,36 @@ function addPost() {
         details: $("#details").val()
     };
 
-    console.log(postData);
-
     if ($("#typeselect").val() == "Request") {
         $.ajax({
             type: 'POST',
             url: '/api/post/addrequest',
             data: postData
-        }).done(function (data) {
-            $("#message").show();
-            document.getElementById("objectjson").innerHTML = data.summary;
+        }).done(function () {
+            $("#postAdded").show();
+            $("#postAddedError").hide();
         }).fail(function () {
-            alert("ajax fail");
-        });
+            $("#postAddedError").show();
+            $("#postAdded").hide();
+        })
     } else {
         $.ajax({
             type: 'POST',
             url: '/api/post/addannouncement',
             data: postData,
-        }).done(function (data) {
-            $("#message").show();
-            document.getElementById("objectjson").innerHTML = data.summary;
+        }).done(function () {
+            $("#postAdded").show();
+            $("#postAddedError").hide();
         }).fail(function () {
-            alert("ajax fail");
-        });
+            $("#postAddedError").show();
+            $("#postAdded").hide();
+        })
     }
 }
 
 function sendDigestEmail() {
+    $("#sentMessage").hide();
+    $("#sentMessageError").hide();
     $.ajax({
         type: 'GET',
         url: '/api/email/sendemail/true'
@@ -135,6 +165,8 @@ function sendDigestEmail() {
 }
 
 function sendReminderEmail() {
+    $("#sentMessage").hide();
+    $("#sentMessageError").hide();
     $.ajax({
         type: 'GET',
         url: '/api/email/sendemail/false'
@@ -145,4 +177,79 @@ function sendReminderEmail() {
         $("#sentMessageError").show();
         $("#sentMessage").hide();
     })
+}
+
+function getDigestHtml() {
+    $.ajax({
+        url: "/views/emailformat.html",
+        success: function (result) {
+            alert(result);
+        }
+    });
+};
+
+function loadPosts(val) {
+    if (val == "Week") {
+        getWeekPosts();
+    } else if (val == "Month") {
+        getMonthPosts();
+    } else {
+        getAllPosts();
+    }
+}
+
+function getWeekPosts() {
+    $.ajax({
+        type: 'GET',
+        url: '/api/post/getallinlastweek',
+        dataType: 'json',
+        success: function (data) {
+            appendPostsToTable(data);
+        },
+        error: function () {
+            alert("fail");
+        }
+    })
+}
+
+function getMonthPosts() {
+    $.ajax({
+        type: 'GET',
+        url: '/api/post/getallinlastmonth',
+        dataType: 'json',
+        success: function (data) {
+            appendPostsToTable(data);
+        },
+        error: function () {
+            alert("fail");
+        }
+    })
+}
+
+function getAllPosts() {
+    $.ajax({
+        type: 'GET',
+        url: '/api/post/getall',
+        dataType: 'json',
+        success: function (data) {
+            appendPostsToTable(data);
+        },
+        error: function () {
+            alert("fail");
+        }
+    })
+};
+
+function appendPostsToTable(data) {
+    var htmlToAppend = "<tr><th>Id</th><th>Name</th><th>Date</th><th>Summary</th><th>Details</th></tr>";
+    $.each(data, function () {
+        htmlToAppend +=
+            "<tr><td><button class='btn btn-link' style='text-align:left'  onclick='viewPostInfo(" + this.Id + ")'>" + this.Id + "</button>" +
+            "</td><td>" + this.SubmitterName +
+            "</td><td>" + this.TimeSubmitted +
+            "</td><td>" + this.Summary +
+            "</td><td>" + this.Details +
+            "</td></tr>";
+    })
+    $("#postDisplayTable").html(htmlToAppend);
 }

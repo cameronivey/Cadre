@@ -48,7 +48,7 @@ namespace Cadre
 
             /* REPLACE THIS WITH REAL AUTHENTICATION
             ----------------------------------------------*/
-            if (!(username == "cameron.ivey@excella.com" && password == "password"))
+            if (!(username == "user@mail.com" && password == "password"))
             {
                 return false;
             }

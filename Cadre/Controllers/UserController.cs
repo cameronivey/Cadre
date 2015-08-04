@@ -50,7 +50,7 @@ namespace Cadre.Controllers
             return Ok(users);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("remove/{id:int}")]
         public IHttpActionResult Remove(int id)
         {

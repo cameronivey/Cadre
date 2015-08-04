@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Data.Entity.Validation;
 using System.Data.Entity.Infrastructure;
+using Cadre.Domain;
 
 namespace Cadre.DataAccessLayer
 {
@@ -25,27 +26,32 @@ namespace Cadre.DataAccessLayer
 
         public DbSet<User> Users { get; set; }
 
-        public IQueryable<T> Get<T>() where T : class
+        public IQueryable<T> Get<T>() where T : class, IEntity
         {
             return this.Set<T>();
         }
 
-        public T Add<T>(T entity) where T : class
+        public T GetSingleById<T>(int id) where T : class, IEntity
+        {
+            return Set<T>().SingleOrDefault(x => x.Id == id);
+        }
+
+        public T Add<T>(T entity) where T : class, IEntity
         {
             return this.Set<T>().Add(entity);
         }
 
-        public T Remove<T>(T entity) where T : class
+        public T Remove<T>(T entity) where T : class, IEntity
         {
             return this.Set<T>().Remove(entity);
         }
 
-        public async Task<int> CommitAsync<T>() where T : class
+        public async Task<int> CommitAsync<T>() where T : class, IEntity
         {
             return await this.CommitAsync<T>(CancellationToken.None);
         }
 
-        public async Task<int> CommitAsync<T>(CancellationToken token) where T : class
+        public async Task<int> CommitAsync<T>(CancellationToken token) where T : class, IEntity
         {
             try
             {

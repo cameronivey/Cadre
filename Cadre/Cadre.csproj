@@ -141,6 +141,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\logo_fav.png" />
+    <Content Include="Content\logo_long.png" />
+    <Content Include="Content\logo_short.png" />
     <Content Include="CSS\font-awesome.min.css" />
     <Content Include="CSS\sb-admin-2.css" />
     <Content Include="CSS\site.css" />
@@ -163,10 +166,12 @@
     <Content Include="Views\AllUsers.html" />
     <Content Include="Views\EmailFormat.html" />
     <Content Include="Views\index.html" />
+    <Content Include="Views\Login.html" />
     <Content Include="Views\Reply.html" />
     <Content Include="Views\SendEmails.html" />
     <Content Include="Views\Shared\nav.html" />
     <Content Include="Views\UserAccount.html" />
+    <Content Include="Views\ViewPost.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -180,13 +185,14 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PostController.cs" />
-    <Compile Include="DigestBodyBuilder.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="IEmailBodyBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReminderBodyBuilder.cs" />
+    <Compile Include="Services\DigestBodyBuilder.cs" />
+    <Compile Include="Services\IEmailBodyBuilder.cs" />
+    <Compile Include="Services\PostViewModelBuilder.cs" />
+    <Compile Include="Services\ReminderBodyBuilder.cs" />
     <Compile Include="ViewModels\AddPostViewModel.cs" />
     <Compile Include="ViewModels\AuthenticateViewModel.cs" />
     <Compile Include="ViewModels\PostViewModel.cs" />

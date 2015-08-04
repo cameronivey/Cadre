@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Cadre.Domain;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -6,14 +7,16 @@ namespace Cadre.DataAccessLayer
 {
     public interface IPostDatabase
     {
-        IQueryable<T> Get<T>() where T : class;
+        IQueryable<T> Get<T>() where T : class, IEntity;
 
-        T Add<T>(T entity) where T : class;
+        T GetSingleById<T>(int id) where T : class, IEntity;
 
-        T Remove<T>(T entity) where T : class;
+        T Add<T>(T entity) where T : class, IEntity;
 
-        Task<int> CommitAsync<T>(CancellationToken token) where T : class;
+        T Remove<T>(T entity) where T : class, IEntity;
 
-        Task<int> CommitAsync<T>() where T : class;
+        Task<int> CommitAsync<T>(CancellationToken token) where T : class, IEntity;
+
+        Task<int> CommitAsync<T>() where T : class, IEntity;
     }
 }

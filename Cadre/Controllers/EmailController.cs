@@ -1,5 +1,6 @@
 ﻿using Cadre.DataAccessLayer;
 using Cadre.Domain.Models;
+using Cadre.Services;
 using Cadre.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,35 +47,26 @@ namespace Cadre.Controllers
                 mail.Subject = "Cadre Reminder Email";
                 builder = new ReminderBodyBuilder();
             }
+            
+            var vmBuilder = new PostViewModelBuilder(database);
 
-            mail.Body = BuildEmailBody(builder);
+            mail.Body = builder.Build(vmBuilder.Build(database.Get<Post>()));
+            
+            AlternateView htmlView = AlternateView.CreateAlternateViewFromString(
+                mail.Body, null, "text/html");
+
+            LinkedResource logo = new LinkedResource(
+                "C:/Users/Cameron/Documents/Visual Studio 2015/Projects/Cadre/Cadre/Content/logo_long.png");
+            logo.ContentId = "companylogo";
+            htmlView.LinkedResources.Add(logo);
+            
+            mail.AlternateViews.Add(htmlView);
+
             mail.IsBodyHtml = true;
 
             SendSmtpEmail(mail);
 
-            return Ok(mail);
-        }
-
-        private string BuildEmailBody(IEmailBodyBuilder builder)
-        {
-            var viewModels = new List<PostViewModel>();
-            var posts = database.Get<Post>();
-
-            viewModels.AddRange(posts.Select(post => new PostViewModel()
-            {
-                Id = post.Id,
-                SubmitterName = post.Submitter.Name,
-                SubmitterEmail = post.Submitter.Email,
-                Summary = post.Summary,
-                Details = post.Details
-            }));
-
-            foreach (var viewModel in viewModels)
-            {
-                viewModel.EmailText = database.Get<Post>().SingleOrDefault(post => post.Id == viewModel.Id).GetEmailText();
-            }
-
-            return builder.Build(viewModels);
+            return Ok();
         }
 
         private void SendSmtpEmail(MailMessage mail)

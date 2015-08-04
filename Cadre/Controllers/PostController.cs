@@ -6,6 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Cadre.ViewModels;
 using System;
+using Cadre.Services;
 
 namespace Cadre.Controllers
 {
@@ -70,7 +71,6 @@ namespace Cadre.Controllers
         [Route("getall")]
         public IHttpActionResult GetAll()
         {
-            var viewModels = new List<PostViewModel>();
             var posts = database.Get<Post>();
 
             if (posts == null)
@@ -78,22 +78,72 @@ namespace Cadre.Controllers
                 return BadRequest();
             }
 
-            viewModels.AddRange(posts.Select(post => new PostViewModel()
-            {
-                Id = post.Id,
-                TimeSubmitted = post.TimeSubmitted,
-                SubmitterName = post.Submitter.Name,
-                SubmitterEmail = post.Submitter.Email,
-                Summary = post.Summary,
-                Details = post.Details
-            }));
-
-            foreach (var viewModel in viewModels)
-            {
-                viewModel.EmailText = GetById(viewModel.Id).GetEmailText();
-            }
+            var builder = new PostViewModelBuilder(database);
+            var viewModels = builder.Build(posts);
 
             return Ok(viewModels);
+        }
+
+        [HttpGet]
+        [Route("getallinlastweek")]
+        public IHttpActionResult GetAllInLastWeek()
+        {
+            var oneWeek = new TimeSpan(7, 0, 0, 0);
+            var bouttAWeekAgo = DateTime.Now.Subtract(oneWeek);
+            var posts = database.Get<Post>().Where(post => post.TimeSubmitted >= bouttAWeekAgo);
+
+            if (posts == null)
+            {
+                return BadRequest();
+            }
+
+            var builder = new PostViewModelBuilder(database);
+            var viewModels = builder.Build(posts);
+
+            return Ok(viewModels);
+        }
+
+        [HttpGet]
+        [Route("getallinlastmonth")]
+        public IHttpActionResult GetAllInLastMonth()
+        {
+            var oneMonth = new TimeSpan(30, 0, 0, 0);
+            var bouttAMonthAgo = DateTime.Now.Subtract(oneMonth);
+            var posts = database.Get<Post>().Where(post => post.TimeSubmitted >= bouttAMonthAgo);
+
+            if (posts == null)
+            {
+                return BadRequest();
+            }
+
+            var builder = new PostViewModelBuilder(database);
+            var viewModels = builder.Build(posts);
+
+            return Ok(viewModels);
+        }
+
+        [HttpGet]
+        [Route("getpost/{id:int}")]
+        public IHttpActionResult GetPost(int id)
+        {
+            var post = database.Get<Post>().Where(p => p.Id == id);
+
+            if (post == null)
+            {
+                return BadRequest();
+            }
+
+            var viewModel = (post.Select(p => new PostViewModel()
+            {
+                Id = p.Id,
+                TimeSubmitted = p.TimeSubmitted,
+                SubmitterName = p.Submitter.Name,
+                SubmitterEmail = p.Submitter.Email,
+                Summary = p.Summary,
+                Details = p.Details
+            }));
+
+            return Ok(viewModel);
         }
 
         [HttpGet]
@@ -107,17 +157,9 @@ namespace Cadre.Controllers
                 return BadRequest();
             }
 
-            var viewModels = new List<PostViewModel>();
+            var viewModels = new PostViewModelBuilder(database);
 
-            viewModels.AddRange(posts.Select(post => new PostViewModel()
-            {
-                Id = post.Id,
-                TimeSubmitted = post.TimeSubmitted,
-                SubmitterName = post.Submitter.Name,
-                SubmitterEmail = post.Submitter.Email,
-                Summary = post.Summary,
-                Details = post.Details
-            }));
+            viewModels.Build(posts);
             
             return Ok(posts);
         }
@@ -126,7 +168,7 @@ namespace Cadre.Controllers
         [Route("remove/{id:int}")]
         public IHttpActionResult Remove(int id)
         {
-            var post = GetById(id);
+            var post = database.GetSingleById<Post>(id);
 
             database.Remove(post);
 
@@ -134,11 +176,5 @@ namespace Cadre.Controllers
 
             return Ok();
         }
-
-        private Post GetById(int id)
-        {
-            return database.Get<Post>().SingleOrDefault(post => post.Id == id);
-        }
-
     }
 }

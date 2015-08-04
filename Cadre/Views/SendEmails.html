@@ -6,7 +6,7 @@
     <script src="/scripts/jquery-2.1.1.min.js"></script>
     <script src="/scripts/application.js"></script>
 </head>
-<body onload="loadLayout()">
+<body onload="loadLayout(); getEmailHtml()">
     <div id="navbar"></div>
 
     <div id="page-wrapper">
@@ -27,12 +27,11 @@
                         <strong>Success!</strong> Email sent successfully.
                     </div>
                     <div class="alert alert-danger fade in" id="sentMessageError" style="display:none">
-                        <strong>Eror!</strong> There was a problem sending the email. 
+                        <strong>Error!</strong> There was a problem sending the email. 
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </body>
 </html>

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Cadre.Domain.Models
 {
-    public abstract class Post
+    public abstract class Post : IEntity
     {
         [Key]
         public int Id { get; set; }
